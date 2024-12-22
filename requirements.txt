@@ -1,0 +1,7 @@
+imutils
+scikit-learn
+h5py
+json_minify
+tensorflow
+keras
+scikit-image

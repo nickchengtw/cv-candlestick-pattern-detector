@@ -1,0 +1,31 @@
+{
+    "image_dataset": "dataset/training/batch3",
+    "image_annotations": "dataset/training/batch3",
+    "image_distractions": "dataset/negitives",
+
+    "vertical_flip": true,
+
+    "features_path": "valley.hdf5",
+    "percent_gt_images": 0.5,
+    "offset": 0,
+    "use_flip": true,
+    "num_distractions_per_image": 50,
+
+    "orientations": 9,
+    "pixels_per_cell": [4, 4],
+    "cells_per_block": [2, 2],
+    "normalize": true,
+    "window_dim": [64, 60],
+
+    "pyramid_start_size": 640,
+
+    "window_step": 6,
+    "overlap_thresh": 0.3,
+    "pyramid_scale": 1.2,
+    "pyramid_min_size": [300, 300],
+    "min_probability": 0.85,
+
+    "C": 10,
+    "n_estimators": 50,
+    "classifier_path": "valley.pickle"
+}
