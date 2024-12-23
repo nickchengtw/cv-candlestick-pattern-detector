@@ -23,7 +23,7 @@
     "overlap_thresh": 0.3,
     "pyramid_scale": 1.2,
     "pyramid_min_size": [300, 300],
-    "min_probability": 0.85,
+    "min_probability": 0.95,
 
     "C": 10,
     "n_estimators": 50,
