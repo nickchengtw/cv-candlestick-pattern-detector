@@ -43,7 +43,7 @@ coverage.xml
 *.db
 *.csv
 *.dat
-*.pickle
+# *.pickle
 *.hdf5
 
 # Environment variables
