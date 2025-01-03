@@ -1,6 +1,7 @@
 {
-    "image_dataset": "dataset/training/batch3",
-    "image_annotations": "dataset/training/batch3",
+    "image_dataset": "dataset/training/",
+    "image_annotations": "dataset/training/",
+    "image_batches": ["batch2", "batch3", "batch4"],
     "image_distractions": "dataset/negitives",
 
     "vertical_flip": false,
@@ -9,23 +10,27 @@
     "percent_gt_images": 0.5,
     "offset": 0,
     "use_flip": true,
-    "num_distractions_per_image": 50,
+    "num_distraction_images": 50,
+    "num_distractions_per_image": 20,
 
     "orientations": 9,
     "pixels_per_cell": [4, 4],
     "cells_per_block": [2, 2],
     "normalize": true,
-    "window_dim": [64, 60],
-
-    "pyramid_start_size": 640,
+    "window_dim": [44, 52],
     
-    "window_step": 6,
+    "window_step": 8,
     "overlap_thresh": 0.3,
-    "pyramid_scale": 1.2,
-    "pyramid_min_size": [300, 300],
-    "min_probability": 0.95,
+    "pyramid_scale": 1.5,
+    "pyramid_min_size": [150, 150],
+    "min_probability": 0.8,
 
     "C": 10,
     "n_estimators": 50,
-    "classifier_path": "peak.pickle"
+    "classifier_path": "peak.pickle",
+
+    "hn_num_distraction_images": 30,
+    "hn_window_step": 4,
+    "hn_pyramid_scale": 1.5,
+    "hn_min_probability": 0.51
 }

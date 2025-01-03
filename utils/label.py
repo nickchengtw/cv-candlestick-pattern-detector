@@ -25,3 +25,11 @@ def load_labels(train_root, xml_file):
         result.append((image_file, bounding_boxes))
     
     return result
+
+def load_label_batches(base_dir, batches, xml_filename):
+    result = []
+    for batch in batches:
+        batch_path = f"{base_dir}/{batch}"
+        xml_path = f"{batch_path}/{xml_filename}"
+        result += load_labels(batch_path, xml_path)
+    return result

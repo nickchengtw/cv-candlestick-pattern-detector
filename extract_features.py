@@ -13,7 +13,7 @@ import lib.dataset as dataset
 from lib.conf import Conf
 from utils.augmentation import *
 from utils.preprocess import process_image
-from utils.label import load_labels
+from utils.label import *
 
 # construct the argument parser and parse the command line arguments
 ap = argparse.ArgumentParser()
@@ -35,20 +35,10 @@ labels = []
 
 print("[INFO] describing training ROIs...")
 
-# setup the progress bar
-# widgets = [
-#     "Extracting: ",
-#     progressbar.Percentage(),
-#     " ",
-#     progressbar.Bar(),
-#     " ",
-#     progressbar.ETA(),
-# ]
-# pbar = progressbar.ProgressBar(maxval=len(trnPaths), widgets=widgets).start()
-
 train_root = conf["image_dataset"]
-xml_file =  train_root + '/10_imglab.xml'
-for image_file, boxes in load_labels(train_root, xml_file):
+batches = conf["image_batches"]
+xml_file = "10_imglab.xml"
+for image_file, boxes in load_label_batches(train_root, batches, xml_file):
     print(f"Image: {image_file}")
     image = cv2.imread(image_file)
     image = process_image(image)
@@ -71,54 +61,36 @@ for image_file, boxes in load_labels(train_root, xml_file):
 
         rois = (*rois,
                 *scale_augmentation(rois[0], 1.1, conf["window_dim"]),
-                *scale_augmentation(rois[1], 1.1, conf["window_dim"])
+                *scale_augmentation(rois[1], 1.1, conf["window_dim"]),
+                *scale_augmentation(rois[0], 1.2, conf["window_dim"]),
+                *scale_augmentation(rois[1], 1.2, conf["window_dim"])
                 )
         
         # loop over the ROIs
         for roi in rois:
+            # cv2.imshow("image", roi)
+            # cv2.waitKey(0)
+            
             # extract features from the ROI and update the list of features and labels
             features = hog.describe(roi)
             data.append(features)
             labels.append(1)
 
-        # update the progress bar
-        # pbar.update(i)
-
-# grab the distraction image paths and reset the progress bar
-# pbar.finish()
-# dstPaths = list(paths.list_images(conf["image_distractions"]))
-# pbar = progressbar.ProgressBar(maxval=conf["num_distraction_images"], widgets=widgets).start()
 neg_root = conf["image_distractions"]
-xml_file =  neg_root + '/10_imglab_neg.xml'
+dstPaths = list(paths.list_images(neg_root))
 print("[INFO] describing distraction ROIs...")
-for image_file, boxes in load_labels(train_root, xml_file):
-    print(f"Image: {image_file}")
-    image = cv2.imread(image_file)
+for i in np.arange(0, conf["num_distraction_images"]):
+    image = cv2.imread(random.choice(dstPaths))
     image = process_image(image)
-    
-    for (top, left, width, height) in boxes:
-        bb = (top, top+height, left, left+width)
-        print(f"box: {bb}")
+    patches = extract_patches_2d(image, tuple(conf["window_dim"]), max_patches=conf["num_distractions_per_image"])
 
-        # try to make it smaller
-        roi = helpers.crop_ct101_bb(image, bb, padding=conf["offset"], dstSize=tuple((conf["window_dim"][0]*2, conf["window_dim"][1]*2)))
-    
-        patches = extract_patches_2d(roi, tuple(conf["window_dim"]), max_patches=conf["num_distractions_per_image"])
-        # loop over the patches
-        for patch in patches:
-            # extract features from the patch, then update the data and label list
-            features = hog.describe(patch)
-            
-            # cv2.imshow("", patch)
-            # cv2.waitKey(0)
-            
-            data.append(features)
-            labels.append(-1)
-
-        # update the progress bar
-        # pbar.update(i)
+    # loop over the patches
+    for patch in patches:
+        # extract features from the patch, then update the data and label list
+        features = hog.describe(patch)
+        data.append(features)
+        labels.append(-1)
 
 # dump the dataset to file
-# pbar.finish()
 print("[INFO] dumping features and labels to file...")
 dataset.dump_dataset(data, labels, conf["features_path"], "features")

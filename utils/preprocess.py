@@ -4,10 +4,10 @@ import os
 # Define a function to process an image
 def process_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    (T, threshInv) = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
-    # print("thresholding value: {}".format(T))
-    dilated = cv2.dilate(threshInv.copy(), None, iterations=2)
-    return dilated
+    (T, proc) = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
+    # proc = cv2.erode(proc.copy(), None, iterations=1)
+    # proc = cv2.dilate(proc.copy(), None, iterations=1)
+    return proc
 
 
 if __name__ == "__main__":

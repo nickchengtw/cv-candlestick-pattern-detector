@@ -1,36 +1,33 @@
 import xml.etree.ElementTree as ET
 import numpy as np
+import argparse
 
-# Path to the DLIB XML file
-xml_file = 'training/batch3/10_imglab.xml'
+from utils.label import *
+from lib.conf import Conf
 
-# Parse the XML file
-tree = ET.parse(xml_file)
-root = tree.getroot()
+# construct the argument parser and parse the command line arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-c", "--conf", required=True, help="path to the configuration file")
+args = vars(ap.parse_args())
+
+# load the configuration file
+conf = Conf(args["conf"])
 
 widths = []
 heights = []
-# Extract and calculate size and aspect ratio
-for image in root.find('images'):  # Find the <images> tag
-    image_file = image.attrib['file']  # Get the file attribute
+
+train_root = conf["image_dataset"]
+batches = conf["image_batches"]
+xml_file = "10_imglab.xml"
+for image_file, boxes in load_label_batches(train_root, batches, xml_file):
     print(f"Image: {image_file}")
-    
-    for box in image.findall('box'):  # Find all <box> tags within the image
-        width = int(box.attrib['width'])
-        height = int(box.attrib['height'])
-        
+    for (top, left, width, height) in boxes:  # Find all <box> tags within the image
         # Calculate size and aspect ratio
         size = width * height
         aspect_ratio = width / height
-        
-        # Extract box coordinates for reference
-        # top = box.attrib['top']
-        # left = box.attrib['left']
 
         widths.append(width)
         heights.append(height)
-        
-        # print(f"  Box - Top: {top}, Left: {left}, Width: {width}, Height: {height}", end='')
         print(f"    Size: {size}, Aspect Ratio: {aspect_ratio:.2f}")
 
 # compute the average of both the width and height lists

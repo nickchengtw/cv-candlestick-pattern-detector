@@ -52,7 +52,7 @@ def shrink_and_fill(image, shrink_width, shrink_height):
 def scale_augmentation(image, factor, win_dim):
     return (
         # scale_and_crop_center(image, factor, 1, win_dim[0], win_dim[1]),
-        scale_and_crop_center(image, 1, factor, win_dim[0], win_dim[1]),
+        # scale_and_crop_center(image, 1, factor, win_dim[0], win_dim[1]),
+        shrink_and_fill(image, image.shape[1], int(image.shape[0]/factor)),
         shrink_and_fill(image, int(image.shape[1]/factor), image.shape[0])
-        # scale_and_crop_center(image, factor, factor, win_dim[0], win_dim[1])
     )

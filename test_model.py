@@ -21,7 +21,7 @@ args = vars(ap.parse_args())
 
 # load the image and convert it to grayscale
 image = cv2.imread(args["image"])
-image = imutils.resize(image, width=min(640, image.shape[1]))
+image = imutils.resize(image, width=min(480, image.shape[1]))
 processed_image = process_image(image)
 
 marked = image.copy()
@@ -114,7 +114,7 @@ with open("coord.pickle", "wb") as file:
     
 
 
-patterns = find_valley_peak_pattern(peaks, valleys, peak_tolerance=50)
+patterns = find_valley_peak_pattern(peaks, valleys, peak_tolerance=30)
 print(patterns)
 for pattern in patterns:
     image = plot_pattern(image, pattern)
