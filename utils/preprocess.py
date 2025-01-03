@@ -6,7 +6,7 @@ def process_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     (T, proc) = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
     # proc = cv2.erode(proc.copy(), None, iterations=1)
-    # proc = cv2.dilate(proc.copy(), None, iterations=1)
+    proc = cv2.dilate(proc.copy(), None, iterations=1)
     return proc
 
 

@@ -114,7 +114,7 @@ with open("coord.pickle", "wb") as file:
     
 
 
-patterns = find_valley_peak_pattern(peaks, valleys, peak_tolerance=30)
+patterns = find_valley_peak_pattern(peaks, valleys, peak_tolerance=80)
 print(patterns)
 for pattern in patterns:
     image = plot_pattern(image, pattern)

@@ -69,7 +69,7 @@ for image_file, boxes in load_label_batches(train_root, batches, xml_file):
         # loop over the ROIs
         for roi in rois:
             # cv2.imshow("image", roi)
-            # cv2.waitKey(0)
+            cv2.waitKey(0)
             
             # extract features from the ROI and update the list of features and labels
             features = hog.describe(roi)
